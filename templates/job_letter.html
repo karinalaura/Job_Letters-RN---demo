@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Letter</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="job-letter{% if pdf_mode %} pdf-mode{% endif %}">
+    {% if preview_mode %}
+        {% include 'navbar.html' %}
+    {% endif %}
+
+    {% if preview_mode %}
+    <!-- Preview watermark overlay -->
+    <div class="preview-watermark">PREVIEW ONLY</div>
+    {% endif %}
+
+    <div class="letter-container">
+        {% if preview_mode %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flashes flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <hr class="flash-messages">
+        {% endif %}
+        
+        {% if preview_mode %}
+        <div class="header">
+             <img src="{{ url_for('static', filename='letterhead.png', _external=True) }}" alt="Letterhead">
+        </div>
+        {% else %}
+        <!-- Header space for PDF mode -->
+        <div class="pdf-header-space"></div>
+        {% endif %}
+
+        <div class="ref">
+            PF: {{ employee_data['badge'] if employee_data and not employee_data.error else '[Badge Number]' }}
+        </div>
+
+        <div class="date">
+            {{ current_date }}
+        </div>
+
+        <div class="recipient-address">
+            {% if org_details and not org_details.error %}
+            {% if org_details['manager'] %}{{ org_details['manager'] }}<br>{% endif %}
+            {{ org_details['institution'] }}<br>
+            {% if org_details['address1'] %}{{ org_details['address1'] }}<br>{% endif %}
+            {% if org_details['address2'] %}{{ org_details['address2'] }}<br>{% endif %}
+            {% if org_details['address3'] %}{{ org_details['address3'] }}<br>{% endif %}
+            {{ org_details['city'] }}<br>
+            {% else %}
+            [Institution Name]<br>
+            [Address Line 1]<br>
+            [Address Line 2]<br>
+            [Address Line 3]<br>
+            [City]<br>
+            {% endif %}
+        </div>
+
+        <div class="salutation">
+            Dear Sir/Madam,
+        </div>
+
+        <div class="paragraph">
+            This serves to inform that <b>{{ employee_data['full_name'] if employee_data and not employee_data.error else '[Employee Full Name]' }} <em>(Regimental Number {{ employee_data['badge'] if employee_data and not employee_data.error else '[Badge Number]' }})</em></b> enlisted as a member of the Trinidad and Tobago Police Service with effect from {{ employee_data['engagement_date'] if employee_data and not employee_data.error else '[Engagement Date]' }}.
+        </div>
+
+        <div class="paragraph">
+            At present, the officer holds the substantive rank of <b>
+                {{ employee_data['rank'] if employee_data and not employee_data.error else '[Employee Rank]' }}.</b>
+                {% if employee_data and not employee_data.error and employee_data['acting_rank'] and employee_data['acting_rank'] != 'N/A' and employee_data['acting_rank'] != '' %}
+                However, this officer is currently acting in the next higher rank as<b> {{ employee_data['acting_rank'] }}.
+                {% endif %}
+            </b>
+        </div>
+        <div class="paragraph">
+            {{ employee_data['full_name'] if employee_data and not employee_data.error else '[Employee Full Name]' }} is in receipt of a monthly remuneration of
+            <b><em>
+                {{ employee_data['total_gross_words'] if employee_data and not employee_data.error else '[Total Gross in Words]' }} (${{ "%.2f" | format(employee_data['total_gross']) if employee_data and not employee_data.error else '0.00' }})</em> inclusive of allowances
+                which are subject to Departmental Deductions.
+            </b> <em>(Salary Statement Attached)</em>
+        </div>
+        
+        <div class="closing">
+            Yours faithfully,<br>
+            Commissioner of Police<br>
+            Trinidad and Tobago Police Service
+        </div>
+        
+        {% if preview_mode %}
+        <div class="preview-notice">
+            <br><br>
+            <em>Preview of your job letter</em>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

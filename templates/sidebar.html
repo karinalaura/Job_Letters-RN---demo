@@ -1,0 +1,105 @@
+<!-- Shared sidebar template -->
+<div class="user-sidebar">
+    <form method="POST" action="{{ url_for('search_badge') }}" class="sidebar-search-form">
+        <input type="text" id="sidebar_badge_number" name="badge_number" placeholder="Search badge number" value="{{ selected_badge or '' }}">
+        <div class="sidebar-search-actions">
+            <button type="submit" class="sidebar-search-btn">Search</button>
+            {% if selected_badge %}
+            <a href="{{ url_for('clear_badge_selection') }}" class="sidebar-search-btn sidebar-clear-btn">Clear</a>
+            {% endif %}
+        </div>
+    </form>
+
+    <div class="user-name">{{ employee_data['full_name'] if employee_data and not employee_data.error else '' }}</div>
+    <div class="user-rank">
+        {% if employee_data and not employee_data.error %}
+            <div class="rank-current">{{ employee_data['rank'] }}</div>
+            {% if employee_data['acting_rank'] and employee_data['acting_rank'] != 'N/A' and employee_data['acting_rank'] != '' %}
+                <div class="rank-acting">(Acting {{ employee_data['acting_rank'] }})</div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="sidebar-employee-details">
+        <div class="sidebar-info-item">
+            <span class="sidebar-label">Badge:</span>
+            <span class="sidebar-value">{{ employee_data['badge'] if employee_data and not employee_data.error else 'Not selected' }}</span>
+        </div>
+        
+        {% if employee_data %}
+            {% if not employee_data.error %}
+                <div class="sidebar-info-item">
+                    <span class="sidebar-label">Rank:</span>
+                    <span class="sidebar-value">{{ employee_data['rank'] }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-label">Acting Rank:</span>
+                    <span class="sidebar-value">{{ employee_data['acting_rank'] or 'N/A' }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-label">Engagement Date:</span>
+                    <span class="sidebar-value">{{ employee_data['engagement_date'] }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-label">Monthly Gross:</span>
+                    <span class="sidebar-value">${{ "%.2f" | format(employee_data['total_gross']) }}</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-label">Update Monthly Gross:</span>
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <input type="number" step="0.01" class="sidebar-input" id="monthly-gross-input" placeholder="Enter new amount" style="flex: 1;">
+                        <button type="button" id="update-gross-btn" class="btn-update" style="padding: 5px 10px; font-size: 12px;">Update</button>
+                    </div>
+                </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const updateBtn = document.getElementById('update-gross-btn');
+                    const grossInput = document.getElementById('monthly-gross-input');
+                    
+                    if (updateBtn && grossInput) {
+                        updateBtn.addEventListener('click', function() {
+                            const newAmount = grossInput.value.trim();
+                            if (!newAmount || isNaN(newAmount) || parseFloat(newAmount) <= 0) {
+                                alert('Please enter a valid amount.');
+                                return;
+                            }
+                            
+                            if (confirm(`Update monthly gross to $${parseFloat(newAmount).toFixed(2)}?`)) {
+                                fetch('/update_gross_amount', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ amount: parseFloat(newAmount) })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        location.reload();
+                                    } else {
+                                        console.error('Error updating gross amount:', data.error);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                            }
+                        });
+                    }
+                });
+                </script>
+                
+            {% else %}
+                <div class="sidebar-info-item">
+                    <span class="sidebar-label">Error:</span>
+                    <span class="sidebar-value">{{ employee_data.error }}</span>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="sidebar-info-item">
+                <span class="sidebar-label">Status:</span>
+                <span class="sidebar-value">Search a badge number to load employee details.</span>
+            </div>
+        {% endif %}
+    </div>
+</div>

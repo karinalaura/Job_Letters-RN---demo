@@ -1,0 +1,1240 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    padding: 30px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* ===== LOGIN PAGE STYLES ===== */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #0088cc;
+}
+
+.login-container h1 {
+    text-align: center;
+    color: #262626;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.login-container p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.login-container .form-group {
+    margin-bottom: 25px;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.login-container input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.login-container input[type="text"]:focus {
+    outline: none;
+    border-color: #0088cc;
+}
+
+.login-container input[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #0088cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+}
+
+.login-container input[type="submit"]:hover {
+    background-color: #0077b3;
+}
+
+.login-container .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #f5c6cb;
+}
+
+.login-container .alert {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-container .alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.login-container .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Login page body background */
+body.login-page {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+form {
+    margin-top: 20px;
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Unused button styles removed - using btn-signout for consistency */
+
+.result-box {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.button-group {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.button-group button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button-group button:hover {
+    background-color: #218838;
+}
+
+.spinner {
+    display: none !important;
+}
+
+.details-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+
+.details-box {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.hidden-section {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .details-row {
+        flex-direction: column;
+    }
+}
+
+
+
+/* ===== JOB LETTER SPECIFIC STYLES ===== */
+
+/* Job letter body styling */
+body.job-letter {
+    font-family: Arial, sans-serif; /* Use site default font for UI elements */
+    margin: 40px;
+    line-height: 1.6;
+    font-size: 14px; /* Use standard size for UI elements */
+    position: relative;
+}
+
+/* Make body transparent in PDF mode */
+body.pdf-mode {
+    background: transparent;
+}
+
+/* PDF mode class for hiding elements */
+.pdf-mode .navbar,
+.pdf-mode .flash-messages {
+    display: none !important;
+}
+
+/* PDF page settings for xhtml2pdf */
+@page {
+    size: A4;
+    margin: 20mm;
+    background-image: url('static/letterhead_with_watermark.png');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100% auto;
+}
+
+/* Aggressive background reset for xhtml2pdf */
+@media print {
+    * {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+}
+
+/* Letter container */
+.letter-container {
+    max-width: 600px;
+    margin: auto;
+    position: relative;
+    z-index: 10;
+    background: transparent;
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.6;
+}
+
+/* Ensure all letter content uses proper font */
+.letter-container, .letter-container *,
+.paragraph, .header, .ref, .date, 
+.recipient-address, .salutation, .closing, .signature {
+    font-family: 'Times New Roman', serif !important;
+}
+
+/* Ensure all content has transparent backgrounds for PDF */
+body.job-letter, .job-letter div, .job-letter p, .job-letter span, 
+.letter-container, .paragraph, .header, .ref, .date, 
+.recipient-address, .salutation, .closing, .signature {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Navbar must stay opaque even in job letter mode and use site font */
+.job-letter .global-navbar {
+    background: #262626 !important;
+    background-color: #262626 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+}
+
+/* Ensure all navbar elements use site font */
+.job-letter .global-navbar *,
+.job-letter .btn,
+.job-letter .navbar-left,
+.job-letter .navbar-right {
+    font-family: Arial, sans-serif !important;
+}
+
+/* PDF mode applies watermark as background to letter container */
+.pdf-mode .letter-container {
+    background-image: url('static/watermark.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% auto;
+    min-height: 800px;
+}
+
+/* General letter element styles */
+.header { 
+    text-align: center; 
+    margin-bottom: 40px; 
+}
+
+.ref { 
+    text-align: left; 
+    font-weight: bold; 
+    margin-bottom: 20px; 
+}
+
+.date { 
+    text-align: left; 
+    font-weight: bold; 
+    margin-bottom: 20px; 
+}
+
+.recipient-address { 
+    font-weight: bold; 
+    margin-bottom: 20px; 
+}
+
+.salutation { 
+    margin-bottom: 20px; 
+}
+
+.paragraph { 
+    margin-bottom: 15px; 
+    text-align: justify; 
+}
+
+.closing { 
+    margin-top: 40px; 
+}
+
+.signature { 
+    margin-top: 60px; 
+}
+
+.signature-line { 
+    border-top: 1px solid #000; 
+    width: 181px; 
+    margin-top: 50px; 
+}
+
+.preview-notice {
+    text-align: center;
+    margin-top: 40px;
+    color: #666;
+    font-style: italic;
+}
+
+.preview-watermark {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 72px;
+    font-weight: bold;
+    color: rgba(255, 0, 0, 0.2);
+    pointer-events: none;
+    z-index: 5000;
+    font-family: Arial, sans-serif;
+    letter-spacing: 8px;
+    user-select: none;
+    width: 100%;
+    text-align: center;
+}
+
+/* Header image sizing - adjust for full letter size */
+.header img {
+    display: block; 
+    margin: auto; 
+    margin-bottom: 20px; 
+    width: 100%; 
+    max-width: 632px;
+    height: auto;
+}
+
+/* Ensure all content appears above the background */
+.letter-container > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Styles for preview mode buttons and flashes */
+.flash-messages {
+    position: relative;
+    z-index: 100;
+    margin-bottom: 20px;
+}
+
+/* Legacy navbar for job letter preview (will be updated to use global navbar) */
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Space for PDF header placeholder */
+.pdf-header-space {
+    height: 180px;
+}
+
+/* ===== GLOBAL NAVIGATION BAR ===== */
+.global-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #262626 !important;
+    background: #262626 !important;
+    opacity: 1 !important;
+    padding: 5px 20px;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    box-sizing: border-box;
+    transition: none;
+    animation: none;
+}
+
+.global-navbar .navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.global-navbar .navbar-logo {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+    max-width: 300px;
+}
+
+.global-navbar .navbar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.global-navbar .navbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.global-navbar .navbar-search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.global-navbar .navbar-search-form input[type="text"] {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #1a1a1a;
+    color: white;
+    min-width: 220px;
+}
+
+.global-navbar .navbar-search-form input[type="text"]::placeholder {
+    color: #bbb;
+}
+
+.global-navbar .navbar-search-btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    background-color: #007bff;
+    font-weight: 700;
+}
+
+.global-navbar .navbar-clear-btn {
+    background-color: #6c757d;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.global-navbar .btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-block;
+    transition: none;
+    animation: none;
+}
+
+/* Removed unused navbar button styles - only using btn-signout */
+
+.global-navbar .btn-signout {
+    background-color: transparent;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+}
+
+.global-navbar .btn-icon {
+    height: 16px;
+    width: 16px;
+    object-fit: contain;
+}
+
+/* ===== CONSOLIDATED BUTTON STYLES ===== */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    margin-left: 5px;
+}
+
+
+
+/* ===== SIDEBAR LAYOUT ===== */
+
+.user-sidebar {
+    width: 250px;
+    background-color: #0088cc;
+    padding: 20px;
+    padding-top: 100px;
+    border-right: 1px solid #dee2e6;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+.user-sidebar .sidebar-search-form {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-sidebar .sidebar-search-form input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+}
+
+.user-sidebar .sidebar-search-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.user-sidebar .sidebar-search-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    background-color: #005f87;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-sidebar .sidebar-clear-btn {
+    background-color: #6c757d;
+}
+
+.user-sidebar .user-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+.user-sidebar .user-rank {
+    font-size: 18px;
+    font-weight: 400;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.rank-current {
+    font-weight: 500;
+    color: white;
+}
+
+.rank-acting {
+    font-size: 16px;
+    color: #e6f3ff;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+/* Sidebar Employee Details */
+.sidebar-employee-details {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.sidebar-info-item {
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.sidebar-label {
+    display: block;
+    font-weight: 500;
+    color: #e6f3ff;
+    margin-bottom: 3px;
+}
+
+.sidebar-value {
+    display: block;
+    color: white;
+    font-weight: 400;
+}
+
+.main-content {
+    margin-left: 290px;
+    padding: 10px 15px 20px 15px;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+/* Add top margin to body to account for fixed navbar */
+body {
+    margin: 0;
+    margin-top: 80px;
+}
+
+/* Override for job letter which has its own margin */
+body.job-letter {
+    margin: 0;
+    margin-top: 80px;
+}
+
+/* Pages without sidebar should not have left margin */
+body:not(.has-sidebar) .main-content {
+    margin-left: 0;
+}
+
+/* ===== PDF HISTORY TABLE STYLING ===== */
+.pdf-history-table {
+    margin-top: 25px;
+    overflow-x: auto;
+    max-width: calc(100vw - 350px);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.pdf-history-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    margin: 0;
+}
+
+.pdf-history-table th {
+    background: linear-gradient(135deg, #0088cc 0%, #0077b3 100%);
+    color: white;
+    font-weight: 600;
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+.pdf-history-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f5;
+    color: #333;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.pdf-history-table tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+}
+
+.pdf-history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Column widths */
+.pdf-history-table th:nth-child(1), 
+.pdf-history-table td:nth-child(1) {
+    width: 160px;
+    font-weight: 500;
+}
+
+.pdf-history-table th:nth-child(2), 
+.pdf-history-table td:nth-child(2) {
+    width: auto;
+    min-width: 200px;
+}
+
+.pdf-history-table th:nth-child(3), 
+.pdf-history-table td:nth-child(3) {
+    width: 180px;
+    text-align: right;
+    padding-right: 25px;
+}
+
+/* Actions cell styling */
+.actions-cell {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Navbar-style action buttons */
+.pdf-action-btn {
+    background-color: transparent !important;
+    color: #0088cc !important;
+    border: 1px solid #e0e6ed !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    white-space: nowrap !important;
+    margin-left: 0 !important;
+    opacity: 1 !important;
+}
+
+.pdf-action-btn:hover {
+    background-color: #0088cc !important;
+    color: white !important;
+    border-color: #0088cc !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(0, 136, 204, 0.2) !important;
+    opacity: 1 !important;
+}
+
+.pdf-action-btn .btn-icon {
+    height: 14px !important;
+    width: 14px !important;
+    object-fit: contain !important;
+    opacity: 0.8 !important;
+    margin-right: 0 !important;
+}
+
+.pdf-action-btn:hover .btn-icon {
+    opacity: 1 !important;
+}
+
+/* No PDFs message styling */
+.no-pdfs {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    margin-top: 30px;
+    border: 2px dashed #dee2e6;
+}
+
+.no-pdfs p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.no-pdfs .btn {
+    background-color: #0088cc;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.no-pdfs .btn:hover {
+    background-color: #0077b3;
+}
+
+/* ===== ERROR PAGE STYLES ===== */
+body.error-page {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    margin-top: 80px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.error-page h1 {
+    color: #721c24;
+}
+
+.error-page ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.error-page a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.error-page a:hover {
+    text-decoration: underline;
+}
+
+/* ===== PROFESSIONAL MAIN PAGE STYLES ===== */
+
+/* Page Header */
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.validity-notice {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background-color: #e8f4fd;
+    border: 1px solid #0088cc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.validity-notice p {
+    margin: 0;
+    color: #0066aa;
+}
+
+/* Removed duplicate .main-content rule - consolidated above */
+
+/* Form Section */
+.form-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #e9ecef;
+    width: 100%;
+    max-width: calc(100vw - 350px);
+    box-sizing: border-box;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: left;
+    display: block;
+    clear: both;
+}
+
+.section-header {
+    margin-bottom: 25px;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.section-header h3 {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.section-description {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+    max-width: none;
+}
+
+/* Custom Organization Form Grid - Stack Vertically */
+.custom-org-section .form-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+/* Form Groups */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.form-group select:focus,
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff;
+}
+
+.checkbox-group label {
+    font-weight: 500;
+    color: #495057;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Custom Organization Section */
+.custom-org-section {
+    margin-top: 20px;
+    padding: 25px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+}
+
+.hidden-section {
+    display: none;
+}
+
+/* Generate Section */
+.generate-section {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.generate-btn,
+.badge-search-form .generate-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+.generate-btn.secondary,
+.badge-search-form .generate-btn.secondary {
+    background-color: #6c757d;
+}
+
+..generate-btn:hover,
+.badge-search-form .generate-btn:hover,
+.generate-btn.secondary:hover,
+.badge-search-form .generate-btn.secondary:hover {
+    opacity: 0.95;
+}
+
+.generate-btn.secondary,
+.badge-search-form .generate-btn.secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.generate-btn:disabled {
+    background-color: #6c757d;
+    color: #adb5bd;
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+.badge-search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 420px;
+    margin-bottom: 25px;
+}
+
+.badge-search-form .form-group {
+    width: 100%;
+}
+
+.badge-search-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.badge-search-actions .generate-btn,
+.badge-search-actions .generate-btn.secondary {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Information Cards */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.info-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.organization-card {
+    max-width: calc(100vw - 350px);
+}
+
+.card-header {
+    background: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.card-content {
+    padding: 25px;
+}
+
+/* Organization Card Specific */
+.organization-card .card-header {
+    background-color: #0077b3;
+}
+
+.organization-card .card-header h3 {
+    color: white;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.info-value {
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: right;
+}
+
+.no-data,
+.placeholder-text {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .info-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .info-value {
+        text-align: left;
+    }
+}

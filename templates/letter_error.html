@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Generation Error</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="error-page">
+    <!-- Global Navigation Bar -->
+    <div class="global-navbar">
+        <div class="navbar-left">
+            <img src="{{ url_for('static', filename='TTPS_Logo.png') }}" alt="TTPS Logo" class="navbar-logo">
+        </div>
+        <div class="navbar-right">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="btn btn-signout">
+                    <img src="{{ url_for('static', filename='signout.png') }}" alt="Sign Out" class="btn-icon">
+                    SIGN OUT
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <h1>Error Generating Job Letter</h1>
+    <p>We encountered the following issues:</p>
+    <ul>
+        {% for error_msg in errors %}
+            <li>{{ error_msg }}</li>
+        {% endfor %}
+    </ul>
+    <p>Please go back and ensure that a valid Badge Number, Institution, and Branch are selected before attempting to generate the letter.</p>
+    <p><a href="/">Return to Home</a></p>
+</body>
+</html>

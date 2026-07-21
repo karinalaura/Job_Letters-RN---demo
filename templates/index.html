@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- VERSION: Updated 2025-09-27 - Employee card removed, data moved to sidebar -->
+    <title>Employee Job Letter Generator</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="has-sidebar">
+    {% include 'navbar.html' %}
+
+    <!-- Left Sidebar for User Info -->
+    {% if current_user.is_authenticated %}
+    {% include 'sidebar.html' %}
+    {% endif %}
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="page-header">
+            <h1>Employee Job Letter Generator</h1>
+            <p class="subtitle">Generate official employment verification letters</p>
+        </div>
+
+        <div class="form-section">
+                <div class="section-header">
+                    <h2>Organization Details</h2>
+                    <p class="section-description">Select the organization where the letter should be addressed</p>
+                </div>
+
+                <div id="dropdown-org-fields" class="form-grid">
+                    <div class="form-group">
+                        <label for="type_select">Organization Type</label>
+                        <select id="type_select">
+                            <option value="">-- Select Type --</option>
+                            {% for type in types %}
+                            <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="institution_select">Institution</label>
+                        <select id="institution_select">
+                            <option value="">-- Select Institution --</option>
+                        </select>
+                        <div id="institution-spinner" class="spinner"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="branch_select">Branch</label>
+                        <select id="branch_select">
+                            <option value="">-- Select Branch --</option>
+                        </select>
+                        <div id="branch-spinner" class="spinner"></div>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="other_org_checkbox">
+                    <label for="other_org_checkbox">Use Different Organization</label>
+                </div>
+
+                <div id="other-org-fields" class="hidden-section custom-org-section">
+                    <div class="section-header">
+                        <h3>Custom Organization Details</h3>
+                        <p class="section-description">Enter details for organizations not in our database</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="other_institution_name">Institution Name</label>
+                            <input type="text" id="other_institution_name" autocomplete="off" placeholder="Enter institution name">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_address_line1">Address Line 1</label>
+                            <input type="text" id="other_address_line1" autocomplete="off" placeholder="Street address">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_address_line2">Address Line 2</label>
+                            <input type="text" id="other_address_line2" autocomplete="off" placeholder="Suite, apartment, etc. (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_address_line3">Address Line 3</label>
+                            <input type="text" id="other_address_line3" autocomplete="off" placeholder="Additional address info (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="other_city">City</label>
+                            <input type="text" id="other_city" autocomplete="off" placeholder="City name">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Letter Generation Form -->
+                <form id="jobLetterForm" action="{{ url_for('generate_job_letter_preview') }}" method="POST">
+                    <input type="hidden" id="type_for_letter" name="type_for_letter" value="">
+                    <input type="hidden" id="institution_for_letter" name="institution_for_letter" value="">
+                    <input type="hidden" id="branch_for_letter" name="branch_for_letter" value="">
+
+                    <!-- Hidden fields for "Other Organization" details -->
+                    <input type="hidden" id="is_other_org_for_letter" name="is_other_org_for_letter" value="false">
+                    <input type="hidden" id="other_institution_name_for_letter" name="other_institution_name_for_letter" value="">
+                    <input type="hidden" id="other_address_line1_for_letter" name="other_address_line1_for_letter" value="">
+                    <input type="hidden" id="other_address_line2_for_letter" name="other_address_line2_for_letter" value="">
+                    <input type="hidden" id="other_address_line3_for_letter" name="other_address_line3_for_letter" value="">
+                    <input type="hidden" id="other_city_for_letter" name="other_city_for_letter" value="">
+
+                    <div class="generate-section">
+                        <button type="button" id="generate-letter-button" class="generate-btn">
+                            <span class="btn-icon">📄</span>
+                            Generate Job Letter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Information Cards -->
+            <div class="info-cards">
+            <div class="info-card organization-card">
+                <div class="card-header">
+                    <h3>Organization Details</h3>
+                </div>
+                <div class="card-content">
+                    <div id="org-details-sidebox">
+                        <p class="placeholder-text">Select organization type and institution to view details</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+    const typeSelect = document.getElementById('type_select');
+    const institutionSelect = document.getElementById('institution_select');
+    const branchSelect = document.getElementById('branch_select');
+    const institutionSpinner = document.getElementById('institution-spinner');
+    const branchSpinner = document.getElementById('branch-spinner');
+    const orgDetailsSidebox = document.getElementById('org-details-sidebox');
+    const generateLetterButton = document.getElementById('generate-letter-button');
+    const dropdownOrgFields = document.getElementById('dropdown-org-fields');
+    
+    // Other Org fields
+    const otherOrgCheckbox = document.getElementById('other_org_checkbox');
+    const otherOrgFields = document.getElementById('other-org-fields');
+    const otherInstitutionNameInput = document.getElementById('other_institution_name');
+    const otherAddressLine1Input = document.getElementById('other_address_line1');
+    const otherAddressLine2Input = document.getElementById('other_address_line2');
+    const otherAddressLine3Input = document.getElementById('other_address_line3');
+    const otherCityInput = document.getElementById('other_city');
+
+    // Hidden fields for Job Letter Form
+    const typeForLetterInput = document.getElementById('type_for_letter');
+    const institutionForLetterInput = document.getElementById('institution_for_letter');
+    const branchForLetterInput = document.getElementById('branch_for_letter');
+    const isOtherOrgForLetterInput = document.getElementById('is_other_org_for_letter');
+    const otherInstitutionNameForLetterInput = document.getElementById('other_institution_name_for_letter');
+    const otherAddressLine1ForLetterInput = document.getElementById('other_address_line1_for_letter');
+    const otherAddressLine2ForLetterInput = document.getElementById('other_address_line2_for_letter');
+    const otherAddressLine3ForLetterInput = document.getElementById('other_address_line3_for_letter');
+    const otherCityForLetterInput = document.getElementById('other_city_for_letter');
+
+    let isOtherOrgSelected = false;
+
+    function fetchAndPopulateDropdown(url, selectElement, callback = null) {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                selectElement.innerHTML = '<option value="">-- Select --</option>';
+                data.forEach(item => {
+                    selectElement.innerHTML += `<option value="${item}">${item}</option>`;
+                });
+                selectElement.disabled = false;
+                if (callback) callback();
+            })
+            .catch(error => console.error('Error fetching dropdown data:', error));
+    }
+
+    function handleTypeChange() {
+        institutionSelect.innerHTML = '<option value="">-- Select Institution --</option>';
+        institutionSelect.disabled = true;
+        branchSelect.innerHTML = '<option value="">-- Select Branch --</option>';
+        branchSelect.disabled = true;
+
+        if (typeSelect.value) {
+            fetchAndPopulateDropdown(`/get_institutions/${typeSelect.value}`, institutionSelect);
+        }
+        updateOrgDetailsDisplay();
+        checkGenerateButtonStatus();
+    }
+
+    function handleInstitutionChange() {
+        branchSelect.innerHTML = '<option value="">-- Select Branch --</option>';
+        branchSelect.disabled = true;
+
+        if (typeSelect.value && institutionSelect.value) {
+            fetchAndPopulateDropdown(`/get_branches/${typeSelect.value}/${institutionSelect.value}`, branchSelect, () => {
+                updateOrgDetailsDisplay();
+                checkGenerateButtonStatus();
+            });
+        } else {
+            updateOrgDetailsDisplay();
+            checkGenerateButtonStatus();
+        }
+    }
+
+    function handleBranchChange() {
+        updateOrgDetailsDisplay();
+        checkGenerateButtonStatus();
+    }
+
+    async function updateOrgDetailsDisplay() {
+        const selectedType = typeSelect.value;
+        const selectedInstitution = institutionSelect.value;
+        const selectedBranch = branchSelect.value;
+
+        // Update hidden fields for the job letter form
+        typeForLetterInput.value = selectedType;
+        institutionForLetterInput.value = selectedInstitution;
+        branchForLetterInput.value = selectedBranch;
+        isOtherOrgForLetterInput.value = 'false'; // Ensure this is false if not using other org
+
+        if (!isOtherOrgSelected && selectedType && selectedInstitution) {
+                try {
+                    const response = await fetch('/get_org_details_ajax', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            type: selectedType,
+                            institution: selectedInstitution,
+                            branch: selectedBranch
+                        }),
+                    });
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                    }
+                    const orgDetails = await response.json();
+
+                    if (orgDetails && !orgDetails.error) {
+                        orgDetailsSidebox.innerHTML = `
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">Type:</span>
+                                    <span class="info-value">${orgDetails.type}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Institution:</span>
+                                    <span class="info-value">${orgDetails.institution}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Branch:</span>
+                                    <span class="info-value">${orgDetails.branch || 'N/A'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Address:</span>
+                                    <span class="info-value">${orgDetails.address1 || ''} ${orgDetails.address2 ? orgDetails.address2 : ''}<br>${orgDetails.city || ''}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        orgDetailsSidebox.innerHTML = '<p class="error-message">Error loading organization details or not found.</p>';
+                        console.error('Org details error:', orgDetails.error);
+                    }
+                } catch (error) {
+                    console.error('Error fetching organization details:', error);
+                    orgDetailsSidebox.innerHTML = `<p class="error-message">${error.message || 'Could not fetch organization details.'}</p>`;
+                }
+        } else if (isOtherOrgSelected) {
+             // The 'Other Organization' details are updated by updateOtherOrgDetails()
+        }
+        else {
+            orgDetailsSidebox.innerHTML = '<p class="placeholder-text">Select organization type and institution to view details</p>';
+        }
+        checkGenerateButtonStatus(); // Ensure button status is re-evaluated
+    }
+
+    function toggleOtherOrgFields() {
+        isOtherOrgSelected = otherOrgCheckbox.checked;
+        if (isOtherOrgSelected) {
+            otherOrgFields.style.display = 'block';
+            dropdownOrgFields.style.display = 'none'; // Hide dropdowns
+            isOtherOrgForLetterInput.value = 'true';
+            updateOtherOrgDetails(); // Populate hidden fields and sidebox immediately
+        } else {
+            otherOrgFields.style.display = 'none';
+            dropdownOrgFields.style.display = 'block'; // Show dropdowns
+            isOtherOrgForLetterInput.value = 'false';
+            // Clear other org hidden fields
+            otherInstitutionNameForLetterInput.value = '';
+            otherAddressLine1ForLetterInput.value = '';
+            otherAddressLine2ForLetterInput.value = '';
+            otherAddressLine3ForLetterInput.value = '';
+            otherCityForLetterInput.value = '';
+            updateOrgDetailsDisplay(); // Revert to dropdown-based org details
+        }
+        checkGenerateButtonStatus();
+    }
+
+    function updateOtherOrgDetails() {
+        const institutionName = otherInstitutionNameInput.value.trim();
+        const address1 = otherAddressLine1Input.value.trim();
+        const address2 = otherAddressLine2Input.value.trim();
+        const address3 = otherAddressLine3Input.value.trim();
+        const city = otherCityInput.value.trim();
+
+        // Update hidden fields for the job letter form
+        otherInstitutionNameForLetterInput.value = institutionName;
+        otherAddressLine1ForLetterInput.value = address1;
+        otherAddressLine2ForLetterInput.value = address2;
+        otherAddressLine3ForLetterInput.value = address3;
+        otherCityForLetterInput.value = city;
+
+        // Update sidebox display for Other Organization
+        if (isOtherOrgSelected) {
+            if (institutionName && address1 && city) {
+                const addressParts = [address1, address2, address3].filter(part => part).join(', ');
+                orgDetailsSidebox.innerHTML = `
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Type:</span>
+                            <span class="info-value">Other</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Institution:</span>
+                            <span class="info-value">${institutionName}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Address:</span>
+                            <span class="info-value">${addressParts}<br>${city}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                orgDetailsSidebox.innerHTML = '<p class="placeholder-text">Enter "Other Organization" details.</p>';
+            }
+        }
+        checkGenerateButtonStatus();
+    }
+
+    function checkGenerateButtonStatus() {
+        // Check if user is authenticated and has sidebar data (simpler check)
+        const userSidebar = document.querySelector('.user-sidebar');
+        const userName = document.querySelector('.user-name');
+        const employeeDataExists = !!(userSidebar && userName && userName.textContent.trim());
+        
+        let canGenerate = employeeDataExists;
+
+        if (isOtherOrgSelected) {
+            canGenerate = canGenerate && 
+                         otherInstitutionNameInput.value.trim() && 
+                         otherAddressLine1Input.value.trim() && 
+                         otherCityInput.value.trim();
+        } else {
+            const hasBranches = branchSelect.options.length > 1;
+            canGenerate = canGenerate && 
+                         typeSelect.value && 
+                         institutionSelect.value && 
+                         (!hasBranches || branchSelect.value);
+        }
+        
+        generateLetterButton.disabled = !canGenerate;
+    }
+
+
+    // --- Initial Load ---
+    document.addEventListener('DOMContentLoaded', async function () {
+        // Initialize dropdowns based on server-side provided types
+        // The `types` variable is passed from Flask to Jinja2 and should be available
+        // If `types` isn't correctly populated, this would be an issue.
+
+        // Event listeners
+        typeSelect.onchange = handleTypeChange;
+        institutionSelect.onchange = handleInstitutionChange;
+        branchSelect.onchange = handleBranchChange;
+        otherOrgCheckbox.onchange = toggleOtherOrgFields;
+        
+        [otherInstitutionNameInput, otherAddressLine1Input, otherAddressLine2Input, otherAddressLine3Input, otherCityInput]
+            .forEach(input => input.addEventListener('input', updateOtherOrgDetails));
+
+        // Generate letter button handler
+        generateLetterButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!generateLetterButton.disabled) {
+                document.getElementById('jobLetterForm').submit();
+            }
+        });
+
+        // Initialize dropdowns
+        institutionSelect.disabled = true;
+        branchSelect.disabled = true;
+        
+        // Initialize state
+        toggleOtherOrgFields();
+        checkGenerateButtonStatus();
+    });
+</script>
+
+    </div> <!-- end main-content -->
+
+</body>
+</html>

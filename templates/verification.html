@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Verification - TTPS</title>
+</head>
+<body>
+    <h1>Trinidad and Tobago Police Service</h1>
+    <h2>Document Verification System</h2>
+    
+    {% if status == 'valid' %}
+        <h3>STATUS: VERIFIED</h3>
+        
+        <p><strong>Flash Key:</strong> {{ data.flash_key }}</p>
+        
+        <p>Document Authenticated - This verification key corresponds to an authentic job letter issued by the Trinidad and Tobago Police Service.</p>
+        
+        <h4>Document Details:</h4>
+        <!-- Available data fields from app.py verification_data dictionary -->
+        <ul>
+            <li><strong>Badge Number:</strong> {{ data.badge_number }}</li>
+            <li><strong>Rank:</strong> {{ data.rank }}</li>
+            <li><strong>Acting Rank:</strong> {{ data.acting_rank }}</li>
+            <li><strong>Full Name:</strong> {{ data.full_name }}</li>
+            <li><strong>Engagement Date:</strong> {{ data.engagement_date }}</li>
+            <li><strong>Total Gross Salary:</strong> {{ data.total_gross }}</li>
+            <li><strong>Addressed To:</strong> {{ data.org_name }}</li>
+            <li><strong>Issue Date:</strong> {{ data.issue_date }}</li>
+            <li><strong>Employment Status:</strong> {{ data.current_employment }}</li>
+        </ul>
+        
+    <!-- ============================================ -->
+    <!-- INVALID DOCUMENT - Status: INVALID -->
+    <!-- Style this section for invalid/forged documents -->
+    <!-- ============================================ -->
+    {% elif status == 'invalid' %}
+        <h3>STATUS: INVALID</h3>
+        
+        <p><strong>Verification Failed</strong></p>
+        <p>{{ message }}</p>
+        
+        <p><strong>Warning:</strong> This verification key does not exist in the Trinidad and Tobago Police Service records. This may indicate:</p>
+        <ul>
+            <li>The document has been forged or altered</li>
+            <li>The verification key was entered incorrectly</li>
+            <li>The document was not issued by the TTPS</li>
+        </ul>
+        <p>Please contact the TTPS Human Resources Department for assistance if you believe this is an error.</p>
+    
+    <!-- ============================================ -->
+    <!-- ERROR - Status: ERROR -->
+    <!-- Style this section for system errors -->
+    <!-- ============================================ -->
+    {% elif status == 'error' %}
+        <h3>STATUS: ERROR</h3>
+        
+        <p><strong>Verification Error</strong></p>
+        <p>{{ message }}</p>
+        
+    {% endif %}
+    
+    
+</body>
+</html>

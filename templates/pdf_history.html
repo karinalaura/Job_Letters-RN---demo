@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF History - Job Letter Generator</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="has-sidebar">
+    {% include 'navbar.html' %}
+
+    <!-- Left Sidebar for User Info -->
+    {% if current_user.is_authenticated %}
+    {% include 'sidebar.html' %}
+    {% endif %}
+
+    <div class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="page-header">
+            <h1>PDF History</h1>
+            <p class="subtitle">View and download your previously generated job letters</p>
+            <div class="validity-notice">
+                <p><strong>Note:</strong> Job letters are valid for 6 months from the date of generation. Only letters from the past 6 months are displayed here.</p>
+            </div>
+        </div>
+
+        {% if pdfs %}
+            <div class="pdf-history-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Officer Name</th>
+                            <th>Organization</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pdf in pdfs %}
+                        <tr>
+                            <td>{{ pdf.generated_at.strftime('%d %b %Y') if pdf.generated_at else 'N/A' }}</td>
+                            <td>{{ pdf.employee_full_name or 'N/A' }}</td>
+                            <td>{{ pdf.organization_name or 'N/A' }}</td>
+                            <td class="actions-cell">
+                                <a href="{{ url_for('view_saved_pdf', pdf_id=pdf.id) }}" 
+                                   class="pdf-action-btn" target="_blank" title="View PDF in browser">
+                                    <img src="/static/search.png" alt="View" class="btn-icon">
+                                    View
+                                </a>
+                                <a href="{{ url_for('download_saved_pdf', pdf_id=pdf.id) }}" 
+                                   class="pdf-action-btn" title="Download PDF">
+                                    <img src="/static/download.png" alt="Download" class="btn-icon">
+                                    Download
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="no-pdfs">
+                <p>No job letters have been generated in the past 6 months.</p>
+                <a href="{{ url_for('index') }}" class="btn">Generate Your First Job Letter</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- All styles moved to main CSS file for consistency -->
+
+        </div> <!-- end main-content -->
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!-- Global Navigation Bar -->
+<div class="global-navbar">
+    <div class="navbar-left">
+        <img src="{{ url_for('static', filename='TTPS_Logo.png') }}" alt="TTPS Logo" class="navbar-logo">
+    </div>
+    <div class="navbar-center"></div>
+    <div class="navbar-right">
+        {% if current_user.is_authenticated %}
+            {% if request.endpoint == 'index' %}
+                <a href="{{ url_for('pdf_history') }}" class="btn btn-signout">
+                    <img src="{{ url_for('static', filename='search.png') }}" alt="View Letters" class="btn-icon">
+                    VIEW DOWNLOADED JOB LETTERS
+                </a>
+            {% elif request.endpoint == 'pdf_history' %}
+                <a href="{{ url_for('index') }}" class="btn btn-signout">
+                    <img src="{{ url_for('static', filename='search.png') }}" alt="Create A New Job Letter" class="btn-icon">
+                    CREATE A NEW JOB LETTER
+                </a>
+            {% elif request.endpoint == 'generate_job_letter_preview' or 'job_letter' in request.endpoint or preview_mode %}
+                <a href="{{ url_for('download_job_letter_pdf') }}" class="btn btn-signout" download="JobLetter_{{ employee_data['FULL NAME'] | replace(' ', '_') }}.pdf">
+                    <img src="{{ url_for('static', filename='search.png') }}" alt="Download Your Job Letter" class="btn-icon">
+                    DOWNLOAD YOUR JOB LETTER
+                </a>
+                <a href="{{ url_for('index') }}" class="btn btn-signout">
+                    <img src="{{ url_for('static', filename='search.png') }}" alt="Go Back" class="btn-icon">
+                    GO BACK
+                </a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="btn btn-signout">
+                <img src="{{ url_for('static', filename='signout.png') }}" alt="Sign Out" class="btn-icon">
+                SIGN OUT
+            </a>
+        {% endif %}
+    </div>
+</div>
